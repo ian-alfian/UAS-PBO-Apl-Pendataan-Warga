@@ -178,14 +178,59 @@ fun LoginScreen(onLogin: () -> Unit, onRegister: () -> Unit) {
 @Composable
 fun RegisterScreen(onReg: () -> Unit, onBack: () -> Unit) {
     val context = LocalContext.current
-    var nama by remember { mutableStateOf("") }; var nik by remember { mutableStateOf("") }; var email by remember { mutableStateOf("") }; var user by remember { mutableStateOf("") }; var pass by remember { mutableStateOf("") }; var conf by remember { mutableStateOf("") }
-    Column(modifier = Modifier.fillMaxSize().background(LightBlue).verticalScroll(rememberScrollState()).padding(24.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+    var nama by remember { mutableStateOf("") }
+    var nik by remember { mutableStateOf("") }
+    var email by remember { mutableStateOf("") }
+    var user by remember { mutableStateOf("") }
+    var pass by remember { mutableStateOf("") }
+    var conf by remember { mutableStateOf("") }
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(LightBlue)
+            .verticalScroll(rememberScrollState())
+            .padding(24.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
         Text("REGISTER", fontSize = 32.sp, fontWeight = FontWeight.Bold, color = PrimaryBlue)
         Spacer(modifier = Modifier.height(24.dp))
-        EditTextField("Nama Lengkap", nama) { nama = it }; EditTextField("NIK", nik) { nik = it }; EditTextField("Alamat E-Mail", email) { email = it }; EditTextField("Username", user) { user = it }; EditTextField("Password", pass, true) { pass = it }; EditTextField("Konfirmasi Password", conf, true) { conf = it }
+
+        EditTextField("Nama Lengkap", nama) { nama = it }
+        EditTextField("NIK", nik) { nik = it }
+        EditTextField("Alamat E-Mail", email) { email = it }
+        EditTextField("Username", user) { user = it }
+        EditTextField("Password", pass, true) { pass = it }
+        EditTextField("Konfirmasi Password", conf, true) { conf = it }
+
         Spacer(modifier = Modifier.height(24.dp))
-        Button(onClick = { if (nama.isEmpty() || user.isEmpty() || pass != conf) { Toast.makeText(context, "Cek kembali data Anda!", Toast.LENGTH_SHORT).show() } else { registeredUser = user; registeredPass = pass; Toast.makeText(context, "Registrasi Berhasil!", Toast.LENGTH_SHORT).show(); onReg() } }, modifier = Modifier.fillMaxWidth().height(50.dp), colors = ButtonDefaults.buttonColors(PrimaryBlue), shape = RoundedCornerShape(10.dp)) { Text("Register") }
-        TextButton(onClick = onBack) { Text("Sudah memiliki akun? Login", color = PrimaryBlue) }
+
+        Button(
+            onClick = {
+                if (nama.isEmpty() || user.isEmpty() || pass != conf) {
+                    Toast.makeText(context, "Cek kembali data Anda!", Toast.LENGTH_SHORT).show()
+                } else {
+                    // --- LOGIKA SIMPAN DATA LOGIN ---
+                    registeredUser = user
+                    registeredPass = pass
+
+                    // --- KUNCI: UPDATE PROFIL DENGAN NAMA PENDAFTAR ---
+                    gNama = nama
+
+                    Toast.makeText(context, "Registrasi Berhasil!", Toast.LENGTH_SHORT).show()
+                    onReg() // Pindah ke Login
+                }
+            },
+            modifier = Modifier.fillMaxWidth().height(50.dp),
+            colors = ButtonDefaults.buttonColors(PrimaryBlue),
+            shape = RoundedCornerShape(10.dp)
+        ) {
+            Text("Register", color = Color.White, fontWeight = FontWeight.Bold)
+        }
+
+        TextButton(onClick = onBack) {
+            Text("Sudah memiliki akun? Login", color = PrimaryBlue)
+        }
     }
 }
 
